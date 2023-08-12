@@ -54,7 +54,7 @@ const router = new Router();
 
 router
   .get("/", async (ctx: Context) => {
-    ctx.response.body = "{ "Hello": "World" }";
+    ctx.response.body = "Hello World";
   })
   .get("/users", async (ctx: Context) => {
     ctx.response.body = await getAllUsers();
