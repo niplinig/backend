@@ -53,6 +53,9 @@ const { getQuery } = helpers;
 const router = new Router();
 
 router
+  .get("/", async (ctx: Context) => {
+    ctx.response.body = "{ "Hello": "World" }";
+  })
   .get("/users", async (ctx: Context) => {
     ctx.response.body = await getAllUsers();
   })
@@ -63,7 +66,7 @@ router
   .post("/users", async (ctx: Context) => {
     const body = ctx.request.body();
     const user = await body.value;
-    await upsertUser(user);   
+    await upsertUser(user);
   })
   .delete("/users/:id", async (ctx: Context) => {
     const { id } = getQuery(ctx, { mergeParams: true });
@@ -75,4 +78,5 @@ const app = new Application();
 app.use(router.routes());
 app.use(router.allowedMethods());
 
+console.log("Server Running at http://localhost:8000/users")
 await app.listen({ port: 8000 });
