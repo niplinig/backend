@@ -7,9 +7,9 @@ export interface User {
 const kv = await Deno.openKv();
 
 export async function getAllUsers() {
-  const users = [];
-  for await (const res of kv.list({ prefix: ["user"] })) {
-    users.push(res.value);
+  let users = [];
+  for await (const res of kv.list<User>({ prefix: ["user"] })) {
+    users = users.concat(res.value);
   }
   return users;
 }
@@ -19,25 +19,14 @@ export async function getUserById(id: string): Promise<User> {
   return (await kv.get<User>(key)).value!;
 }
 
-export async function upsertUser(user: User) {
+export async function updateUser(user: User) {
   const userKey = ["user", user.id];
-
   const oldUser = await kv.get<User>(userKey);
-
-  if (!oldUser.value) {
-    const ok = await kv.atomic().check(oldUser).set(userKey, user).commit();
-    if (!ok) throw new Error("Something went wrong.");
-  } else {
-    const ok = await kv.atomic().check(oldUser).set(userKey, user).commit();
-    if (!ok) throw new Error("Something went wrong.");
-  }
+  return await kv.atomic().check(oldUser).set(userKey, user).commit();
 }
 
 export async function deleteUserById(id: string) {
   const userKey = ["user", id];
-  const userRes = await kv.get(userKey);
-
-  if (!userRes.value) return;
-
-  await kv.atomic().check(userRes).delete(userKey).commit();
+  const userRes = await kv.get<User>(userKey);
+  return await kv.atomic().check(userRes).delete(userKey).commit();
 }

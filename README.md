@@ -20,10 +20,12 @@ deno task dev
 > [!NOTE]
 > While running the server run command in another terminal tab
 
-```bash
-curl -X POST http://localhost:8000/users -H "Content-Type: application/json" -d '{ "id": 202008397, "name": "Nicolas Plaza", "email": "niplinig@espol.edu.ec" }'
-```
+You can use REST API tools like **[Insomnia](https://insomnia.rest/)** or **[Postman](https://www.postman.com/)**.
 
-## See the results
+Once installed, try `GET` or `POST` requests.
+
+## Or use the gets results in the browser
 
 Watch the results in the WebViewer
+
+`http://localhost:8000`

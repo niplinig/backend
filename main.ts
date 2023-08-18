@@ -4,7 +4,8 @@ import {
   helpers,
   Router,
 } from "https://deno.land/x/oak@v12.4.0/mod.ts";
-import { deleteUserById, getAllUsers, getUserById, upsertUser } from "./db.ts";
+import { oakCors } from "https://deno.land/x/cors@v1.2.2/mod.ts";
+import { deleteUserById, getAllUsers, getUserById, updateUser } from "./db.ts";
 
 export interface User {
   id: number; // 202008397
@@ -54,7 +55,9 @@ const router = new Router();
 
 router
   .get("/", async (ctx: Context) => {
-    ctx.response.body = "Hello World";
+    ctx.response.body = {
+      message: "Hello World",
+    };
   })
   .get("/users", async (ctx: Context) => {
     ctx.response.body = await getAllUsers();
@@ -66,17 +69,16 @@ router
   .post("/users", async (ctx: Context) => {
     const body = ctx.request.body();
     const user = await body.value;
-    await upsertUser(user);
+    ctx.response.body = await updateUser(user);
   })
   .delete("/users/:id", async (ctx: Context) => {
     const { id } = getQuery(ctx, { mergeParams: true });
-    await deleteUserById(id);
+    ctx.response.body = await deleteUserById(id);
   });
 
 const app = new Application();
-
+app.use(oakCors());
 app.use(router.routes());
 app.use(router.allowedMethods());
-
-console.log("Server Running at http://localhost:8000/users")
+console.log("Server Running at http://localhost:8000/users");
 await app.listen({ port: 8000 });
