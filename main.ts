@@ -8,7 +8,7 @@ import { oakCors } from "https://deno.land/x/cors@v1.2.2/mod.ts";
 import { deleteUserById, getAllUsers, getUserById, updateUser } from "./db.ts";
 
 export interface User {
-  id: number; // 202008397
+  id: string; // 202008397
   name: string; // Nicolas Plaza
   email: string; // niplinig@espol.edu.ec
 }

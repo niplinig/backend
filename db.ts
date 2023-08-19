@@ -1,13 +1,9 @@
-export interface User {
-  id: number; // 202008397
-  name: string; // Nicolas Plaza
-  email: string; // niplinig@espol.edu.ec
-}
+import { User } from "./main.ts";
 
 const kv = await Deno.openKv();
 
 export async function getAllUsers() {
-  let users = [];
+  let users: User[] = [];
   for await (const res of kv.list<User>({ prefix: ["user"] })) {
     users = users.concat(res.value);
   }
