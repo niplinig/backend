@@ -5,7 +5,8 @@ import {
   Router,
 } from "https://deno.land/x/oak@v12.4.0/mod.ts";
 import { oakCors } from "https://deno.land/x/cors@v1.2.2/mod.ts";
-import { deleteUserById, getAllUsers, getUserById, updateUser, getAllReservations, getReservationById, updateReservation } from "./db.ts";
+import { deleteUserById, getAllUsers, getUserById, updateUser, getAllReservations, getReservationById, updateReservation, deleteReservationById } from "./db.ts";
+
 
 export interface User {
   id: string; // 202008397
@@ -86,6 +87,10 @@ router
   const body = ctx.request.body();
   const reservation = await body.value;
   ctx.response.body = await updateReservation(reservation);
+  })
+  .post("/reservations/:id", async (ctx: Context) => {
+    const { id } = getQuery(ctx, { mergeParams: true });
+    ctx.response.body = await deleteReservationById( id );
   });
 
 const app = new Application();
