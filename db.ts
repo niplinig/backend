@@ -66,6 +66,16 @@ export async function getReservationById(id: string): Promise<Reservation> {
   return (await kv.get<Reservation>(key)).value!;
 }
 
+export async function getReservationByUser(user_id: string) {
+  let reservations: Reservation[] = [];
+  for await (const res of kv.list<Reservation>({ prefix: ["reservation"] })) {
+    if (res.value.user == user_id) {
+      reservations = reservations.concat(res.value);
+    }
+  }
+  return reservations;
+}
+
 export async function updateReservation(reservation: Reservation) {
   const reservationKey = ["reservation", reservation.id];
   const oldReservation = await kv.get<Reservation>(reservationKey);

@@ -19,7 +19,7 @@ export interface Schedule {
   id: string;
   place: string; // Gimnacio Tecnología
   building: string; // A1
-  date: string; // day-month-year
+  date: string; // year-month-day
   capacity: string; // int
   start_hour: string; // hour:minutes
   end_hour: string; // hour:minutes
