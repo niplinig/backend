@@ -6,7 +6,7 @@ import {
 } from "https://deno.land/x/oak@v12.4.0/mod.ts";
 import { oakCors } from "https://deno.land/x/cors@v1.2.2/mod.ts";
 import { deleteUserById, getAllUsers, getUserById, updateUser, getAllReservations, getReservationById, updateReservation, deleteReservationById,
-getAllSchedules, getScheduleById, updateSchedule, deleteScheduleById } from "./db.ts";
+getAllSchedules, getScheduleById, getReservationByUser, updateSchedule, deleteScheduleById } from "./db.ts";
 
 
 export interface User {
@@ -80,6 +80,10 @@ router
   .get("/reservations/:id", async (ctx: Context) => {
   const { id } = getQuery(ctx, { mergeParams: true });
   ctx.response.body = await getReservationById(id);
+  })
+  .get("/reservations/:user_id", async (ctx: Context) => {
+    const { user_id } = getQuery(ctx, { mergeParams: true });
+    ctx.response.body = await getReservationByUser(user_id);
   })
   .post("/reservations", async (ctx: Context) => {
   const body = ctx.request.body();
