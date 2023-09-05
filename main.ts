@@ -86,9 +86,9 @@ router
   const reservation = await body.value;
   ctx.response.body = await updateReservation(reservation);
   })
-  .post("/reservations/:id", async (ctx: Context) => {
+  .delete("/reservations/:id", async (ctx: Context) => {
     const { id } = getQuery(ctx, { mergeParams: true });
-    ctx.response.body = await deleteReservationById( id );
+    ctx.response.body = await deleteReservationById(id);
   });
 
 const app = new Application();
