@@ -29,8 +29,8 @@ export interface Schedule {
 
 export interface Reservation {
   id: string;
-  user: User;
-  schedule: Schedule;
+  user: string; // user-id
+  schedule: string; // schedule-id
 }
 
 const { getQuery } = helpers;
