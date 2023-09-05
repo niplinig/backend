@@ -81,7 +81,7 @@ router
   const { id } = getQuery(ctx, { mergeParams: true });
   ctx.response.body = await getReservationById(id);
   })
-  .get("/reservations/:user_id", async (ctx: Context) => {
+  .get("/reservations_by_user/:user_id", async (ctx: Context) => {
     const { user_id } = getQuery(ctx, { mergeParams: true });
     ctx.response.body = await getReservationByUser(user_id);
   })
