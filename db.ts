@@ -1,4 +1,4 @@
-import { User, Reservation, Schedule } from "./main.ts";
+import { Reservation, Schedule, User } from "./main.ts";
 
 const kv = await Deno.openKv();
 
@@ -43,7 +43,8 @@ export async function getScheduleById(id: string): Promise<Schedule> {
 export async function updateSchedule(schedule: Schedule) {
   const scheduleKey = ["schedule", schedule.id];
   const oldSchedule = await kv.get<Schedule>(scheduleKey);
-  return await kv.atomic().check(oldSchedule).set(scheduleKey, schedule).commit();
+  return await kv.atomic().check(oldSchedule).set(scheduleKey, schedule)
+    .commit();
 }
 
 export async function deleteScheduleById(id: string) {
@@ -68,7 +69,10 @@ export async function getReservationById(id: string): Promise<Reservation> {
 export async function updateReservation(reservation: Reservation) {
   const reservationKey = ["reservation", reservation.id];
   const oldReservation = await kv.get<Reservation>(reservationKey);
-  return await kv.atomic().check(oldReservation).set(reservationKey, reservation).commit();
+  return await kv.atomic().check(oldReservation).set(
+    reservationKey,
+    reservation,
+  ).commit();
 }
 
 export async function deleteReservationById(id: string) {
@@ -76,5 +80,3 @@ export async function deleteReservationById(id: string) {
   const reservationRes = await kv.get<Reservation>(reservationId);
   return await kv.atomic().check(reservationRes).delete(reservationId).commit();
 }
-
-

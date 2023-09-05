@@ -91,6 +91,8 @@ router
     ctx.response.body = await deleteReservationById(id);
   });
 
+  // Delete added
+
 const app = new Application();
 app.use(oakCors());
 app.use(router.routes());
