@@ -15,35 +15,16 @@ export interface User {
   email: string; // niplinig@espol.edu.ec
 }
 
-export interface Date { // 11-ago-2023
-   day: number;
-   month: string;
-   year: number;
-}
-
-export interface Time { // 22:28
-  hour: number; // 24h-format
-  minutes: number;
-}
-
-export interface Place {
-  id: string;
-  name: string; // ESPOL GYM
-  building: string; // A1
-}
-
-export interface Calendar {
-  id: string;
-  place: Place;
-  date: Date;
-  capacity: number; // max-for-the-day
-}
-
 export interface Schedule {
   id: string;
-  calendar: Calendar;
-  start_hour: Time;
-  end_hour: Time;
+  place: string; // Gimnacio Tecnología
+  building: string; // A1
+  date: string; // day-month-year
+  capacity: string; // int
+  start_hour: string; // hour:minutes
+  end_hour: string; // hour:minutes
+  description: string; // The activity
+  picture_url: string; // ESPOL's pictures
 }
 
 export interface Reservation {
