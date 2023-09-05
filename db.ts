@@ -69,9 +69,7 @@ export async function getReservationById(id: string): Promise<Reservation> {
 export async function getReservationByUser(user_id: string) {
   let reservations: Reservation[] = [];
   for await (const res of kv.list<Reservation>({ prefix: ["reservation_by_user"] })) {
-    if (user_id.localeCompare(res.value.user) == 0) {
-      reservations = reservations.concat(res.value);
-    }
+    reservations = reservations.concat(res.value);
   }
   return reservations;
 }
