@@ -80,7 +80,7 @@ router
   .get("/schedules", async  (ctx: Context) => {
     ctx.response.body = await getAllSchedules();
   })
-  .get("/shedules/:id", async (ctx: Context) => {
+  .get("/schedules/:id", async (ctx: Context) => {
     const { id } = getQuery(ctx, { mergeParams: true });
     ctx.response.body = await getScheduleById(id);
   })
