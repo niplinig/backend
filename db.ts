@@ -72,7 +72,7 @@ export async function updateReservation(reservation: Reservation) {
 }
 
 export async function deleteReservationById(id: string) {
-  const reservationId = ["reservation", parseInt(id, 10)];
+  const reservationId = ["reservation", id];
   const reservationRes = await kv.get<Reservation>(reservationId);
   return await kv.atomic().check(reservationRes).delete(reservationId).commit();
 }
