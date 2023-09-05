@@ -1,4 +1,4 @@
-import { User, Reservation } from "./main.ts";
+import { User, Reservation, Schedule } from "./main.ts";
 
 const kv = await Deno.openKv();
 
@@ -25,6 +25,31 @@ export async function deleteUserById(id: string) {
   const userKey = ["user", id];
   const userRes = await kv.get<User>(userKey);
   return await kv.atomic().check(userRes).delete(userKey).commit();
+}
+
+export async function getAllSchedules() {
+  let schedules: Schedule[] = [];
+  for await (const res of kv.list<Schedule>({ prefix: ["schedule"] })) {
+    schedules = schedules.concat(res.value);
+  }
+  return schedules;
+}
+
+export async function getScheduleById(id: string): Promise<Schedule> {
+  const key = ["schedule", id];
+  return (await kv.get<Schedule>(key)).value!;
+}
+
+export async function updateSchedule(schedule: Schedule) {
+  const scheduleKey = ["schedule", schedule.id];
+  const oldSchedule = await kv.get<Schedule>(scheduleKey);
+  return await kv.atomic().check(oldSchedule).set(scheduleKey, schedule).commit();
+}
+
+export async function deleteScheduleById(id: string) {
+  const scheduleKey = ["schedule", id];
+  const scheduleRes = await kv.get<Schedule>(scheduleKey);
+  return await kv.atomic().check(scheduleRes).delete(scheduleKey).commit();
 }
 
 export async function getAllReservations() {

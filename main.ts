@@ -5,7 +5,8 @@ import {
   Router,
 } from "https://deno.land/x/oak@v12.4.0/mod.ts";
 import { oakCors } from "https://deno.land/x/cors@v1.2.2/mod.ts";
-import { deleteUserById, getAllUsers, getUserById, updateUser, getAllReservations, getReservationById, updateReservation, deleteReservationById } from "./db.ts";
+import { deleteUserById, getAllUsers, getUserById, updateUser, getAllReservations, getReservationById, updateReservation, deleteReservationById,
+getAllSchedules, getScheduleById, updateSchedule, deleteScheduleById } from "./db.ts";
 
 
 export interface User {
@@ -14,11 +15,11 @@ export interface User {
   email: string; // niplinig@espol.edu.ec
 }
 
-// export interface Date { // 11-ago-2023
-//   day: number;
-//   month: string;
-//   year: number;
-// }
+export interface Date { // 11-ago-2023
+   day: number;
+   month: string;
+   year: number;
+}
 
 export interface Time { // 22:28
   hour: number; // 24h-format
@@ -26,27 +27,27 @@ export interface Time { // 22:28
 }
 
 export interface Place {
-  id: number;
+  id: string;
   name: string; // ESPOL GYM
   building: string; // A1
 }
 
 export interface Calendar {
-  id: number;
+  id: string;
   place: Place;
   date: Date;
   capacity: number; // max-for-the-day
 }
 
 export interface Schedule {
-  id: number;
+  id: string;
   calendar: Calendar;
   start_hour: Time;
   end_hour: Time;
 }
 
 export interface Reservation {
-  id: number;
+  id: string;
   user: User;
   schedule: Schedule;
 }
@@ -75,6 +76,22 @@ router
   .delete("/users/:id", async (ctx: Context) => {
     const { id } = getQuery(ctx, { mergeParams: true });
     ctx.response.body = await deleteUserById(id);
+  })
+  .get("/schedules", async  (ctx: Context) => {
+    ctx.response.body = await getAllSchedules();
+  })
+  .get("/shedules/:id", async (ctx: Context) => {
+    const { id } = getQuery(ctx, { mergeParams: true });
+    ctx.response.body = await getScheduleById(id);
+  })
+  .post("/schedules", async (ctx: Context) => {
+    const body = ctx.request.body();
+    const schedule = await body.value;
+    ctx.response.body = await updateSchedule(schedule);
+  })
+  .delete("/schedules/:id", async (ctx: Context) => {
+    const { id } = getQuery(ctx, { mergeParams: true });
+    ctx.response.body = await deleteScheduleById(id);
   })
   .get("/reservations", async (ctx: Context) => {
     ctx.response.body = await getAllReservations();
