@@ -68,22 +68,20 @@ export async function getReservationById(id: string): Promise<Reservation> {
 
 export async function getReservationByUser(user_id: string) {
   let reservations: Reservation[] = [];
-  for await (const res of kv.list<Reservation>({ prefix: ["reservation_by_user"] })) {
-    reservations = reservations.concat(res.value);
+  for await (const res of kv.list<Reservation>({ prefix: ["reservation"] })) {
+    if (user_id.localeCompare(res.value.user) == 0) {
+      reservations = reservations.concat(res.value);
+    }
   }
   return reservations;
 }
 
 export async function updateReservation(reservation: Reservation) {
   const reservationKey = ["reservation", reservation.id];
-  const byUserKey = ["reservation_by_user", reservation.user];
   const oldReservation = await kv.get<Reservation>(reservationKey);
-  const oldByUser = await kv.get<Reservation>(byUserKey);
   return await kv.atomic()
   .check(oldReservation)
-  .check(oldByUser)
   .set(reservationKey, reservation)
-  .set(byUserKey, reservation)
   .commit();
 }
 
@@ -93,6 +91,5 @@ export async function deleteReservationById(id: string) {
   return await kv.atomic()
   .check(reservationRes)
   .delete(reservationId)
-  .delete(["resservation_by_user", reservationRes.value.user])
   .commit();
 }
